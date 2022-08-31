@@ -22,3 +22,21 @@ En el servidor se debe tener la llave privada.
 Listo para instalar el certificado
 
 
+
+## Crear Certificado autofirmado
+
+    keytool -genkey -alias MLD1001 -keyalg rsa -keysize 2048 -sigalg sha256withrsa -validity 730 -keystore MLD1001.jks
+    
+#Comando para obtener el certificado publico
+ 
+    keytool -export -alias UNI50001 -rfc -file UNI50001.cer -keystore UNI50001.jk
+    
+#Obtener certificado privado
+
+Primero se debe convertir el JKS a p12 con el siguiente comando
+
+     keytool -importkeystore -srckeystore UNI50001.jks -srcstorepass changeit -srckeypass changeit -srcalias UNI50001 -destalias UNI50001 -destkeystore  UNI50001.p12 -deststoretype PKCS12 -deststorepass changeit -destkeypass changeit
+
+Luego obtener la llamave privada con el siguiente comando
+
+     openssl pkcs12 -in UNI50001.p12 -nodes -nocerts -out UNI50001.pem
